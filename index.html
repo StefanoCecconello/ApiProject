@@ -14,10 +14,10 @@
       <td bgcolor="#003366" width="197">
       <p align="center">
       <img src="Audio%20Processing%20and%20Indexing%202012_files/medialab.gif" border="0" height="106" width="171"></p></td>
-      <td colspan="2" bgcolor="#ffffff" nowrap="nowrap" width="622">
+      <td style="width: 306px;" colspan="2" bgcolor="#ffffff" nowrap="nowrap">
       <p align="center"><font size="5">Audio Processing and Indexing Project Page</font></p>
       <p align="center"><font size="5">Male-female voice conversion</font></p>
-      <p align="center">(Last updated: 10-01-2014)</p></td>
+      <p align="center">(Last updated: 11-01-2014)</p></td>
       <td bgcolor="#003366" width="166">
       <img src="Audio%20Processing%20and%20Indexing%202012_files/logoULE.gif" border="0" height="106" width="165"></td>
     </tr>
@@ -62,34 +62,116 @@
       <p><font size="3"><br>
       <br>
       </font></p></td>
-      <td bordercolor="#FFFFFF" bordercolorlight="#000000" bordercolordark="#000000" bgcolor="#ffffff" valign="top" width="278">
+      <td style="width: 303px;" bordercolor="#FFFFFF" bordercolorlight="#000000" bordercolordark="#000000" bgcolor="#ffffff" valign="top">
       <font face="Times New Roman"><b>
       <a name="Project Members">Project Members</a></b></font><p>
       <font face="Times New Roman">
       Stefano Cecconello (s1595539)<br></font></p>
       <p><font face="Times New Roman"><b><a name="Goals">Goals</a></b></font></p>
       <p><font face="Times New Roman">The project goal is the production of an instrument for the conversion of the voice in an audio file. </font><span id="result_box" class="short_text" lang="en"><span class="hps">Specifically</span> <span class="hps">what</span> <span class="hps">was done is a program for the conversion from male to female voice.</span></span> </p>
-      <p><font face="Times New Roman"><b><a name="Abstract">Abstract</a></b></font></p>
-      <p style="text-align: justify;"><font face="Times New Roman">The project include a program for the conversion of the </font></p><p style="text-align: justify;"><font face="Times New Roman">A short abstract of the 
-      work done, the obtained results, and the novelty of the work.</font></p>
+      <p><font face="Times New Roman"><b><a name="Abstract">Abstract</a></b></font></p><p style="text-align: justify;"><span style="font-family: Times New Roman;">This
+relation speaks about a male to female voice conversion program. The
+program is made of a training part and a conversion parts, that are
+explained in the Design paragraph. In the implementation I will
+introduce some parameters to adjust the final output. In the experiment
+section is exposed how to tune these parameters by empirical
+experiments using test on the output quality. In the conclusion I will
+demonstrate how the conversion quality could be considered satisfying
+with the usage of this method.</span></p>
       <p style="text-align: justify;"><font face="Times New Roman"><b>
       <a name="Introduction">Introduction</a></b></font></p>
-      <p style="text-align: justify;"><font face="Times New Roman">Give an introduction to 
-      the problem. Discuss the state of the art and work that has been done in this area. Sketch your 
-      approach.</font></p>
+      <p style="text-align: justify;"><font face="Times New Roman">In
+this document we will be discussing the issue of male to female voice
+conversion. The aim is to convert a given male sentence in a new
+sentence that seems like pronounced by a female.<br>The state of art in
+this field works not only on frequencies modify. Actual techniques
+focus also on manipulation of vocal apparatus. The aim is to synthesize
+a female voice based on the physical characteristics of the speaker.<br>My
+approach consists on a simple method based only on frequencies
+modification. The technique consists in two parts: the first is the
+learning part. Here the program tries to understand a function for
+frequencies modify. The second part consists on the conversion. The
+frequencies of a given male voice has been converted using the previous
+understand function.<br>The results of this approach give low sound
+quality voice conversion results, this is probably due to the simple
+method use for frequencies change. Anyhow the final output of the first
+part seems like we expect, also the final voice certainly moves in the
+direction of a female sound.</font></p>
       <p style="text-align: justify;"><font face="Times New Roman"><b><a name="Design">
       Design</a></b></font></p>
-      <p style="text-align: justify;"><font face="Times New Roman">Discuss the design of 
-      your solution or approach of the subject.</font></p>
+      <p style="text-align: justify;"><font face="Times New Roman">The project is divided in two parts. The idea behind these is a conversion driven by a learning.<br>In
+the first part the program focuses on learning a conversion function
+starting from two given files. These are the same sentence, said by a
+man and by a woman. The idea is to find the most significant
+frequencies for every window. Then a map has been made from male to
+female frequencies. By interpolation is generated a polynomial function
+from the previous points.<br>In the second part starting from the
+learned function the frequencies of a new given file are changed. After
+this conversion in the final output we obtain a new sentence that seems
+like said by a woman.</font></p>
       <p style="text-align: justify;"><font face="Times New Roman"><b>
       <a name="Implementation">Implementation</a></b></font></p>
-      <p style="text-align: justify;"><font face="Times New Roman">Describe the 
-      implementation issues, encountered difficulties, solutions, etc.</font></p>
-      <p style="text-align: justify;"><font face="Times New Roman"><b>
+      <p style="text-align: justify;"><font face="Times New Roman">In
+the training two files are required. They are divided in windows of the
+same dimension. The input files are supposed to be distort in time and
+in alignment at most in order of millisecond in every position.<br>A
+conversion from the time domain to the frequencies domain is then
+applied to every windows. Then for every frame of the male sentence the
+most important frequencies are extracted. This is done checking the
+power of every frequency. The strongest N frequencies of the window are
+took in account. Then these N frequencies are inserted in a table and
+one by one they are associated with the first N frequencies of the
+corresponding window in the female sentence. So in the table the most
+important frequency of the male sentence is associated with the most
+important frequency in the female sentence, the second with the second
+and so on. When this process has been done for every window then a
+regression algorithm is applied. From all the pairs is calculated a
+polynomial. It is important to underline the chose of a polynomial with
+a low degree. This choice was done because a high degree polynomial
+could perform worst than a low degree polynomial. This is because it is
+simple to fall in an overfitting problem using high degree polynomial.
+After this process we have a polynomial. As I said at the beginning of
+this chapter the sentences in the two audio files could be not
+perfectly aligned or could have different time length. This means that
+some pairs of equal letters, in the two audio files, could be or not be
+in the same windows. To remove this problem all the training process is
+repeated more than once, and every time a different window size is
+choose. With this strategy two letters that are not in the same window,
+the first time, can be in the same window with different window size.
+This avoid in part the alignment problem and the problem of different
+time length. At the end the polynomial is defined by doing the mean of
+all the found values of the polynomial for different window size.<br>The
+second part apply the polynomial at the frequencies of the target audio
+file. It is also apply a filter for don't introduce frequencies that
+are not in the range 20 Hz-20000 Hz.</font></p><p class="MsoNormal" align="justify">&nbsp;</p>
+      <p class="MsoNormal">&nbsp;</p></td>
+      <td style="width: 306px;" bgcolor="#ffffff" valign="top"><p style="text-align: justify;"><font face="Times New Roman"><b>
       <a name="Experimentation">Experimentation</a></b></font></p>
-      <p style="text-align: justify;"><font face="Times New Roman">Describe your 
-      experimental design and setup for the validation of your solution. Give 
-      the results and ideas for future improvements. </font> </p>
+      <p style="text-align: justify;"><font face="Times New Roman">The
+experiments conducted are initiated by generating pairs of files
+aligned and with time length with difference at the order of
+milliseconds, how requested in the previous chapter. This was done
+using the program audacity.<br>In every experiment the modified
+parameters are: the number of different window sizes used, the windows
+size and the number of frequencies taken into account in every window.
+The parameters are evaluated by listening the final audio file and
+taking into account both audio quality and quality of the conversion.
+The training have been run on spoken sentences. The optimal values
+found for the parameters are:<br></font></p><ul><li><font face="Times New Roman">Number of different
+sizes of window used: 5. The conversion quality is worse using higher
+values. For this reason the number is smaller;</font><span style="font-family: Times New Roman;"></span></li><li><span style="font-family: Times New Roman;"></span>Window size: from 24 to 40 ms. Bigger windows sizes have been tried
+but the quality of the final audio file go down very fast with higher
+size;<span style="font-family: Times New Roman;"></span></li><li><span style="font-family: Times New Roman;"></span>Frequencies for window taken into account: 8.
+This number is completely empirical. Very low values for this number
+work very bad, but increase this value more then 8 gives lower
+conversion quality.<br></li></ul><p style="text-align: justify;"><font face="Times New Roman"><br>In general the polynomial, from the training
+part, seems good. This because for every input frequency an higher
+output frequency is returned. This seems correct because normally the
+frequencies of a female voice are higher of the frequencies of a male
+voice.<br>For conversion quality the results are not really good, but
+the final result seems like a sort of female voice. Also the quality,
+of final audio file, could be accept also if in the result is
+introduced some noise. </font> </p>
       <p><font face="Times New Roman"><b><a name="Software Requirements">Software 
       Requirements</a></b></font></p>
       <p><font face="Times New Roman">The
@@ -98,17 +180,12 @@ script. Voicebox is also necessary for the execution of the program. It
 provide the library for audio manipolation. So Audacity is not stricly
 necessary. It is only use for generate audio file in the correct format
 required from the script.</font></p>
-      <ul>
-        <li>
+      <ul><li>
       <p><span style="font-family: Times New Roman;"><a href="http://it.mathworks.com/products/matlab/">Matlab</a>;</span></p></li><li><p><span style="font-family: Times New Roman;"></span><a href="http://www.ee.ic.ac.uk/hp/staff/dmb/voicebox/voicebox.html">Voicebox</a>;</p></li><li><p><a href="http://audacity.sourceforge.net/?lang=it">Audacity</a>.</p></li></ul>
       <p><font face="Times New Roman"><b><a name="Hardware Requirements">Hardware 
       Requirements</a></b></font></p>
-      <ul>
-        <li>
-      <p><font face="Times New Roman">minimal hardware requirements: the program is a matlab script, then all it is need is to respect <a href="http://it.mathworks.com/products/availability/index.html#ML">matlab system requirements</a>.</font></p></li></ul>
-      <p class="MsoNormal" align="justify">&nbsp;</p>
-      <p class="MsoNormal">&nbsp;</p></td>
-      <td bgcolor="#ffffff" valign="top" width="330"><p><font face="Times New Roman"><b><a name="Deliverables">Deliverables</a></b></font></p><ul><li>
+      <ul><li>
+      <p><font face="Times New Roman">minimal hardware requirements: the program is a matlab script, then all it is need is to respect <a href="http://it.mathworks.com/products/availability/index.html#ML">matlab system requirements</a>.</font></p></li></ul><p><font face="Times New Roman"><b><a name="Deliverables">Deliverables</a></b></font></p><ul><li>
         <p align="justify"><font face="Times New Roman"><a href="data/Technical%20paper%20Stefano%20Cecconello%20s1595539.pdf">Technical paper (pdf)</a>;</font></p></li><li>
         <p align="justify"><span style="font-family: Times New Roman;"><a href="data/code.zip">Project code (zip)</a>.</span></p></li></ul><p><font face="Times New Roman"><b>Information for use</b></font></p>
       <p><span style="font-family: Times New Roman;">The
